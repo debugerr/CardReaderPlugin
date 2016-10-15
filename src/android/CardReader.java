@@ -1,4 +1,4 @@
-package org.apache.cordova.cardreader
+package org.apache.cordova.cardreader;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
