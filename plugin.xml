@@ -36,7 +36,7 @@
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="CardReader">
-        <param name="android-package" value="org.apache.cordova.cardreader.Reader"/>
+        <param name="android-package" value="org.apache.cordova.cardreader.CardReader"/>
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/*">

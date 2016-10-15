@@ -50,7 +50,7 @@ import com.acs.smartcard.Reader.OnStateChangeListener;
 import com.acs.smartcard.TlvProperties;
 
 
-public class Reader extends CordovaPlugin {
+public class CardReader extends CordovaPlugin {
 	private static final String TAG = "CardReaderPlugin";
 	private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";	
 	private static final String[] propertyStrings = { "Unknown", "wLcdLayout",
