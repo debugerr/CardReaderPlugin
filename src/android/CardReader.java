@@ -114,9 +114,11 @@ public class Reader extends CordovaPlugin {
                     }
                 });
             }
-        });
+        });		
+		callbackContext.success();
+	}
 
-		private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 			public void onReceive(Context context, Intent intent) {
 
@@ -171,6 +173,4 @@ public class Reader extends CordovaPlugin {
 				}
 			}
 		};
-		callbackContext.success();
-	}
 }
