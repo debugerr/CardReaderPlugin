@@ -18,3 +18,4 @@ cardreaderExport.removeListener = function (callback, successCallback, errorCall
 
 
 module.exports = cardreaderExport;
+window.cardReader = cardreaderExport;
