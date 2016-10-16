@@ -62,6 +62,7 @@ public class CardReader extends CordovaPlugin {
             "bPPDUSupport", "dwMaxAPDUDataSize", "wIdVendor", "wIdProduct" };
 	
 	private static CallbackContext cbTagRead;
+	private static CallbackContext initCBContext;
 	private UsbManager mManager;
     private Reader mReader;
     private PendingIntent mPermissionIntent;
@@ -125,60 +126,65 @@ public class CardReader extends CordovaPlugin {
 
 	private void init(CallbackContext callbackContext) {
 		
+		initCBContext = callbackContext;
 		for (UsbDevice device : mManager.getDeviceList().values()) {
             mManager.requestPermission(device, mPermissionIntent);
             break;            
         }
-		
-		callbackContext.success();
 	}
 
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 			public void onReceive(Context context, Intent intent) {
 
-				String action = intent.getAction();
+				try 
+				{  
+					String action = intent.getAction();
 
-				if (ACTION_USB_PERMISSION.equals(action)) {
+					if (ACTION_USB_PERMISSION.equals(action)) {
 
-					synchronized (this) {
+						synchronized (this) {
 
-						UsbDevice device = (UsbDevice) intent
-								.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+							UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 
-						if (intent.getBooleanExtra(
-								UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+							if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
 
-							if (device != null) {
-								// Open reader
-								Log.d(TAG, "Opening reader: " + device.getDeviceName());
-								mReader.open(device);
+								if (device != null) {
+									// Open reader
+									Log.d(TAG, "Opening reader: " + device.getDeviceName());
+									mReader.open(device);
+									initCBContext.success();
+								}
+
+							} else {
+								Log.d(TAG, "Permission denied for device " + device.getDeviceName());
 							}
-
-						} else {
-							Log.d(TAG, "Permission denied for device " + device.getDeviceName());
 						}
-					}
 
-				} else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
+					} else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
 
-					synchronized (this) {
+						synchronized (this) {
 
-						// Update reader list
-						for (UsbDevice device : mManager.getDeviceList().values()) {
-							if (mReader.isSupported(device)) {
+							// Update reader list
+							for (UsbDevice device : mManager.getDeviceList().values()) {
+								if (mReader.isSupported(device)) {
 								
+								}
+							}
+
+							UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+
+							if (device != null && device.equals(mReader.getDevice())) {
+	
+								// Close reader
+								mReader.close();
 							}
 						}
-
-						UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-
-						if (device != null && device.equals(mReader.getDevice())) {
-	
-							// Close reader
-							mReader.close();
-						}
 					}
+				} 
+				catch (Exception e) {
+					
+					initCBContext.error(e.toString());
 				}
 			}
 		};
