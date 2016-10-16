@@ -109,10 +109,10 @@ public class CardReader extends CordovaPlugin {
                 }
 
 				//String cmd = MessageFormat.format(javaScriptEventTemplate, "nfc_cardreader_tag", Integer.toString(currState));
-				String cmd = MessageFormat.format("from {0} to {1}, slot: {2}", Integer.toString(prevState), Integer.toString(currState), Integer.toString(slotNum));
+				final String cmd = MessageFormat.format("from {0} to {1}, slot: {2}", Integer.toString(prevState), Integer.toString(currState), Integer.toString(slotNum));
 				Log.v(TAG, cmd);
 
-				cordova.getActivity().runOnUiThread(new Runnable() {
+				final cordova.getActivity().runOnUiThread(new Runnable() {
 					public void run() {
 						cbTagRead.success(cmd);
 					}
@@ -186,8 +186,11 @@ public class CardReader extends CordovaPlugin {
 					}
 				} 
 				catch (Exception e) {
-					
-					initCBContext.error(e.toString());
+					cordova.getActivity().runOnUiThread(new Runnable() {
+						public void run() {
+							initCBContext.error(e.toString());
+						}
+					});						
 				}
 			}
 		};
