@@ -126,7 +126,7 @@ public class CardReader extends CordovaPlugin {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-        cordova.getActivity().registerReceiver(mReceiver, filter);
+        //cordova.getActivity().registerReceiver(mReceiver, filter);
 
 		super.initialize(cordova, webView);
 	}
