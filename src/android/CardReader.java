@@ -135,8 +135,10 @@ public class CardReader extends CordovaPlugin {
 		
 		initCBContext = callbackContext;
 		for (UsbDevice device : mManager.getDeviceList().values()) {
-            mManager.requestPermission(device, mPermissionIntent);
-            break;            
+			if (mReader.isSupported(device)) {
+				mManager.requestPermission(device, mPermissionIntent);
+				break;            
+			}
         }
 	}
 
@@ -159,8 +161,7 @@ public class CardReader extends CordovaPlugin {
 								if (device != null) {
 									// Open reader
 									Log.d(TAG, "Opening reader: " + device.getDeviceName());
-									initCBContext.success(device.getDeviceName());
-									//new OpenTask().execute(device);
+									new OpenTask().execute(device);
 								}
 
 							} else {
