@@ -187,7 +187,7 @@ public class CardReader extends CordovaPlugin {
 						}
 					}
 				} 
-				catch (Exception e) {
+				catch (final Exception e) {
 					cordova.getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							initCBContext.error(e.toString());
