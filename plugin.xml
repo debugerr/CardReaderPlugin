@@ -36,6 +36,7 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="CardReaderPlugin">
         <param name="android-package" value="com.kraftbyte.cardreader.CardReader"/>
+        <param name="onload" value="true" />
       </feature>
     </config-file>
     
