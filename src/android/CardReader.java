@@ -5,6 +5,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.LOG;
 import org.apache.cordova.PermissionHelper;
 import org.apache.cordova.PluginResult;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
