@@ -81,7 +81,7 @@ public class CardReader extends CordovaPlugin {
 	private void init(CallbackContext callbackContext) {
  		
 		// Get USB manager
-        mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        mManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
 
         // Initialize reader
         mReader = new Reader(mManager);
@@ -99,20 +99,6 @@ public class CardReader extends CordovaPlugin {
                         || currState > Reader.CARD_SPECIFIC) {
                     currState = Reader.CARD_UNKNOWN;
                 }
-
-                // Create output string
-                final String outputString = "Slot " + slotNum + ": "
-                        + stateStrings[prevState] + " -> "
-                        + stateStrings[currState];
-
-                // Show output
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        logMsg(outputString);
-                    }
-                });
             }
         });		
 		callbackContext.success();
@@ -137,7 +123,7 @@ public class CardReader extends CordovaPlugin {
 							if (device != null) {
 								// Open reader
 								Log.d(TAG, "Opening reader: " + device.getDeviceName());
-								new OpenTask().execute(device);
+								mReader.open(device);
 							}
 
 						} else {
@@ -150,24 +136,18 @@ public class CardReader extends CordovaPlugin {
 					synchronized (this) {
 
 						// Update reader list
-						mReaderAdapter.clear();
 						for (UsbDevice device : mManager.getDeviceList().values()) {
 							if (mReader.isSupported(device)) {
-								mReaderAdapter.add(device.getDeviceName());
+								
 							}
 						}
 
-						UsbDevice device = (UsbDevice) intent
-								.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+						UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 
 						if (device != null && device.equals(mReader.getDevice())) {
-
-							// Clear slot items
-							mSlotAdapter.clear();
-
+	
 							// Close reader
-							logMsg("Closing reader...");
-							new CloseTask().execute();
+							mReader.close();
 						}
 					}
 				}
