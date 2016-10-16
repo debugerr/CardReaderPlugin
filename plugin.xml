@@ -30,16 +30,17 @@
   
   <!-- android -->
   <platform name="android">
-    <js-module src="www/CardReader.js" name="CardReader">
+    <js-module src="www/CardReader.js" name="CARDREADER">
       <runs />
     </js-module>
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="CardReader">
-        <param name="android-package" value="org.apache.cordova.cardreader.CardReader"/>
+      <feature name="CardReaderPlugin">
+        <param name="android-package" value="com.kraftbyte.cardreader.CardReader"/>
       </feature>
     </config-file>
+    
     <config-file target="AndroidManifest.xml" parent="/*">
-      <uses-permission android:name="android.permission.USB_PERMISSION" />
+      <uses-permission android:name="android.permission.USB_PERMISSION" />      
     </config-file>
     
     <source-file src="src/android/CardReader.java" target-dir="src/org/apache/cordova/cardreader" />

@@ -1,4 +1,4 @@
-package org.apache.cordova.cardreader;
+package com.kraftbyte.cardreader;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -76,19 +76,28 @@ public class CardReader extends CordovaPlugin {
         
         if (action.equals("addListener")) {
 			callbackContext.success();
+			return true;
 		}
 		else if (action.equals("removeListener")) {
 			callbackContext.success();			
+			return true;
 		}
 		else if (action.equals("init")) {
 			init(callbackContext);
+			return true;
 		}
-        return true;
+
+        return false;
     }
+
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+		super.initialize(cordova, webView);
+	}
 
 	private void init(CallbackContext callbackContext) {
  		
-		/*webViewAccessor = this.webView;
+		webViewAccessor = this.webView;
 
 		// Get USB manager
         mManager = (UsbManager) this.cordova.getActivity().getSystemService(Context.USB_SERVICE);
@@ -114,7 +123,7 @@ public class CardReader extends CordovaPlugin {
 				Log.v(TAG, cmd);
 				webViewAccessor.sendJavascript(cmd);
             }
-        });		//*/
+        });
 		callbackContext.success();
 	}
 
