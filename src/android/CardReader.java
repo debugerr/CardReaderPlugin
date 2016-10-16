@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.MessageFormat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -62,6 +63,12 @@ public class CardReader extends CordovaPlugin {
     private Reader mReader;
     private PendingIntent mPermissionIntent;
 
+	String javaScriptEventTemplate =
+        "var e = document.createEvent(''Events'');\n" +
+        "e.initEvent(''{0}'');\n" +
+        "e.tag = {1};\n" +
+        "document.dispatchEvent(e);";
+
 	@Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         
@@ -73,7 +80,6 @@ public class CardReader extends CordovaPlugin {
 		}
 		else if (action.equals("init")) {
 			init(callbackContext);
-			return true;
 		}
         return true;
     }
@@ -99,6 +105,10 @@ public class CardReader extends CordovaPlugin {
                         || currState > Reader.CARD_SPECIFIC) {
                     currState = Reader.CARD_UNKNOWN;
                 }
+
+				String cmd = MessageFormat.format(javaScriptEventTemplate, "nfc_cardreader_tag", Integer.toString(currState));
+				Log.v(TAG, cmd);
+				this.webView.sendJavascript(cmd);
             }
         });		
 		callbackContext.success();

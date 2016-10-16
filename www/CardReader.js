@@ -7,12 +7,12 @@ cardreaderExport.init = function (successCallback, errorCallback) {
 };
 
 cardreaderExport.addListener = function (callback, successCallback, errorCallback) {
-    document.addEventListener("nfc_cardreader", callback, false);
+    document.addEventListener("nfc_cardreader_tag", callback, false);
     exec(successCallback, errorCallback, "CardReader", "addListener");
 };
 
 cardreaderExport.removeListener = function (callback, successCallback, errorCallback) {
-    document.removeEventListener("nfc_cardreader", callback, false);
+    document.removeEventListener("nfc_cardreader_tag", callback, false);
     exec(successCallback, errorCallback, "CardReader", "removeListener");
 };
 
