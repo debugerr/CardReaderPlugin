@@ -91,6 +91,8 @@ public class CardReader extends CordovaPlugin {
 	// Get USB manager
         mManager = (UsbManager) this.cordova.getActivity().getSystemService(Context.USB_SERVICE);
 
+		final finalCordova = cordova;
+
         // Initialize reader
         mReader = new Reader(mManager);
         mReader.setOnStateChangeListener(new OnStateChangeListener() {
@@ -112,7 +114,7 @@ public class CardReader extends CordovaPlugin {
 				final String cmd = MessageFormat.format("from {0} to {1}, slot: {2}", Integer.toString(prevState), Integer.toString(currState), Integer.toString(slotNum));
 				Log.v(TAG, cmd);
 
-				final cordova.getActivity().runOnUiThread(new Runnable() {
+				finalCordova.getActivity().runOnUiThread(new Runnable() {
 					public void run() {
 						cbTagRead.success(cmd);
 					}
