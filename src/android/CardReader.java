@@ -59,6 +59,7 @@ public class CardReader extends CordovaPlugin {
             "wLcdMaxLines", "bMinPINSize", "bMaxPINSize", "sFirmwareID",
             "bPPDUSupport", "dwMaxAPDUDataSize", "wIdVendor", "wIdProduct" };
 	
+	private static CordovaWebView webViewAccessor;
 	private UsbManager mManager;
     private Reader mReader;
     private PendingIntent mPermissionIntent;
@@ -86,6 +87,8 @@ public class CardReader extends CordovaPlugin {
 
 	private void init(CallbackContext callbackContext) {
  		
+		webViewAccessor = this.webView;
+
 		// Get USB manager
         mManager = (UsbManager) this.cordova.getActivity().getSystemService(Context.USB_SERVICE);
 
@@ -108,7 +111,7 @@ public class CardReader extends CordovaPlugin {
 
 				String cmd = MessageFormat.format(javaScriptEventTemplate, "nfc_cardreader_tag", Integer.toString(currState));
 				Log.v(TAG, cmd);
-				this.webView.sendJavascript(cmd);
+				webViewAccessor.sendJavascript(cmd);
             }
         });		
 		callbackContext.success();
