@@ -81,7 +81,7 @@ public class CardReader extends CordovaPlugin {
 	private void init(CallbackContext callbackContext) {
  		
 		// Get USB manager
-        mManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
+        mManager = (UsbManager) this.cordova.getActivity().getSystemService(Context.USB_SERVICE);
 
         // Initialize reader
         mReader = new Reader(mManager);
