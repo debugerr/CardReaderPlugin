@@ -159,13 +159,8 @@ public class CardReader extends CordovaPlugin {
 								if (device != null) {
 									// Open reader
 									Log.d(TAG, "Opening reader: " + device.getDeviceName());
-									//mReader.open(device);
-
-									cordova.getActivity().runOnUiThread(new Runnable() {
-										public void run() {
-											initCBContext.success();
-										}
-									});									
+									
+									 new OpenTask().execute(device);
 								}
 
 							} else {
@@ -196,4 +191,29 @@ public class CardReader extends CordovaPlugin {
 				}
 			}
 		};
+
+	private class OpenTask extends AsyncTask<UsbDevice, Void, Exception> {
+
+        @Override
+        protected Exception doInBackground(UsbDevice... params) {
+
+            Exception result = null;
+
+            try {
+
+                mReader.open(params[0]);
+				cordova.getActivity().runOnUiThread(new Runnable() {
+					public void run() {
+						initCBContext.success();
+					}
+				});	
+
+            } catch (Exception e) {
+
+                result = e;
+            }
+
+            return result;
+        }
+    }
 }
