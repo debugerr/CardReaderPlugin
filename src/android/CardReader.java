@@ -88,7 +88,7 @@ public class CardReader extends CordovaPlugin {
 
 	private void init(CallbackContext callbackContext) {
  		
-		webViewAccessor = this.webView;
+		/*webViewAccessor = this.webView;
 
 		// Get USB manager
         mManager = (UsbManager) this.cordova.getActivity().getSystemService(Context.USB_SERVICE);
@@ -114,7 +114,7 @@ public class CardReader extends CordovaPlugin {
 				Log.v(TAG, cmd);
 				webViewAccessor.sendJavascript(cmd);
             }
-        });		
+        });		//*/
 		callbackContext.success();
 	}
 
