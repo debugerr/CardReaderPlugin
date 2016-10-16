@@ -111,7 +111,12 @@ public class CardReader extends CordovaPlugin {
 				//String cmd = MessageFormat.format(javaScriptEventTemplate, "nfc_cardreader_tag", Integer.toString(currState));
 				String cmd = MessageFormat.format("from {0} to {1}, slot: {2}", Integer.toString(prevState), Integer.toString(currState), Integer.toString(slotNum));
 				Log.v(TAG, cmd);
-				cbTagRead.success(cmd);
+
+				cordova.getActivity().runOnUiThread(new Runnable() {
+					public void run() {
+						cbTagRead.success(cmd);
+					}
+				});				
             }
         });
 		// Register receiver for USB permission
@@ -153,7 +158,12 @@ public class CardReader extends CordovaPlugin {
 									// Open reader
 									Log.d(TAG, "Opening reader: " + device.getDeviceName());
 									mReader.open(device);
-									initCBContext.success();
+
+									cordova.getActivity().runOnUiThread(new Runnable() {
+										public void run() {
+											initCBContext.success();
+										}
+									});									
 								}
 
 							} else {
@@ -164,13 +174,6 @@ public class CardReader extends CordovaPlugin {
 					} else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
 
 						synchronized (this) {
-
-							// Update reader list
-							for (UsbDevice device : mManager.getDeviceList().values()) {
-								if (mReader.isSupported(device)) {
-								
-								}
-							}
 
 							UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 
