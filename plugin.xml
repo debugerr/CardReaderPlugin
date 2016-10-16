@@ -21,16 +21,17 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-cardreader"
-    version="0.0.1">
+    version="1.0.0">
   <name>CardReader</name>
   <description>Cordova Cardreader Plugin</description>
   <license>Apache 2.0</license>
-  <keywords>cordova,cardreader</keywords>
-  <repo>https://github.com/debugerr/cordova-plugin-cardreader</repo>
+  <keywords>NFC,cordova,cardreader</keywords>
+  <repo>https://github.com/debugerr/cordova-plugin-cardreader.git</repo>
+  <issue>https://github.com/debugerr/cordova-plugin-cardreader/issues</issue>
   
   <!-- android -->
   <platform name="android">
-    <js-module src="www/CardReader.js" name="CARDREADER">
+    <js-module src="www/CardReader.js" name="CardReader">
       <runs />
     </js-module>
     <config-file target="res/xml/config.xml" parent="/*">
@@ -42,10 +43,8 @@
     
     <config-file target="AndroidManifest.xml" parent="/*">
       <uses-permission android:name="android.permission.USB_PERMISSION" />      
-    </config-file>
-    
-    <source-file src="src/android/CardReader.java" target-dir="src/org/apache/cordova/cardreader" />
-    <source-file src="src/android/lib/acssmc-1.1.3.jar" target-dir="libs"/>
+    </config-file>    
+    <source-file src="src/android/CardReader.java" target-dir="src/com/kraftbyte/cardreader" />
+    <source-file src="src/android/lib/acssmc-1.1.3.jar" target-dir="src/com/kraftbyte/cardreader"/>
   </platform>
-
 </plugin>
