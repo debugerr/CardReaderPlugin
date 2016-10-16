@@ -61,26 +61,20 @@ public class CardReader extends CordovaPlugin {
             "wLcdMaxLines", "bMinPINSize", "bMaxPINSize", "sFirmwareID",
             "bPPDUSupport", "dwMaxAPDUDataSize", "wIdVendor", "wIdProduct" };
 	
-	private static CordovaWebView webViewAccessor;
+	private static CallbackContext cbTagRead;
 	private UsbManager mManager;
     private Reader mReader;
     private PendingIntent mPermissionIntent;
-
-	String javaScriptEventTemplate =
-        "var e = document.createEvent(''Events'');\n" +
-        "e.initEvent(''{0}'');\n" +
-        "e.tag = {1};\n" +
-        "document.dispatchEvent(e);";
 
 	@Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         
         if (action.equals("addListener")) {
-			callbackContext.success();
+			cbTagRead = callbackContext;			
 			return true;
 		}
 		else if (action.equals("removeListener")) {
-			callbackContext.success();			
+			cbTagRead = null;
 			return true;
 		}
 		else if (action.equals("init")) {
@@ -93,14 +87,7 @@ public class CardReader extends CordovaPlugin {
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-		super.initialize(cordova, webView);
-	}
-
-	private void init(CallbackContext callbackContext) {
- 		
-		webViewAccessor = this.webView;
-
-		// Get USB manager
+	// Get USB manager
         mManager = (UsbManager) this.cordova.getActivity().getSystemService(Context.USB_SERVICE);
 
         // Initialize reader
@@ -120,11 +107,29 @@ public class CardReader extends CordovaPlugin {
                     currState = Reader.CARD_UNKNOWN;
                 }
 
-				String cmd = MessageFormat.format(javaScriptEventTemplate, "nfc_cardreader_tag", Integer.toString(currState));
+				//String cmd = MessageFormat.format(javaScriptEventTemplate, "nfc_cardreader_tag", Integer.toString(currState));
+				String cmd = MessageFormat.format("from {0} to {1}, slot: {2}", Integer.toString(prevState), Integer.toString(currState), Integer.toString(slotNum));
 				Log.v(TAG, cmd);
-				webViewAccessor.sendJavascript(cmd);
+				cbTagRead.success(cmd);
             }
         });
+		// Register receiver for USB permission
+        mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_USB_PERMISSION);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        cordova.getActivity().registerReceiver(mReceiver, filter);
+
+		super.initialize(cordova, webView);
+	}
+
+	private void init(CallbackContext callbackContext) {
+		
+		for (UsbDevice device : mManager.getDeviceList().values()) {
+            mManager.requestPermission(device, mPermissionIntent);
+            break;            
+        }
+		
 		callbackContext.success();
 	}
 
