@@ -160,7 +160,7 @@ public class CardReader extends CordovaPlugin {
 									// Open reader
 									Log.d(TAG, "Opening reader: " + device.getDeviceName());
 									initCBContext.success(device.getDeviceName());
-									new OpenTask().execute(device);
+									//new OpenTask().execute(device);
 								}
 
 							} else {
